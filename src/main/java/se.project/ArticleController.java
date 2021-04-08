@@ -1,11 +1,9 @@
 package se.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,11 +33,30 @@ public class ArticleController {
         return ResponseEntity.ok(article);
     }
 
+    // POST	/articles	create a new article.
+    @PostMapping()
+    public ResponseEntity<Article> createArticle(@RequestBody Article article) {
+        articleRepository.save(article);
+        return ResponseEntity.status(HttpStatus.CREATED).body(article);
+    }
 
+    // PUT	/articles/{id}	update the given article.
+    @PutMapping("/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article updatedArticle) {
+        // check the article exists
+        articleRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        // set id for updated article to the given id
+        updatedArticle.setId(id);
+        // overwrites old Article with that id
+        Article article = articleRepository.save(updatedArticle);
+        return ResponseEntity.ok(article);
+    }
 
-
-
-//    POST	/articles	create a new article.
-//    PUT	/articles/{id}	update the given article.
-//    DELETE	/articles/{id}	delete the given article.
+    // DELETE	/articles/{id}	delete the given article.
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Article> deleteArticleById(@PathVariable Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        articleRepository.delete(article);
+        return ResponseEntity.ok(article);
+    }
 }
