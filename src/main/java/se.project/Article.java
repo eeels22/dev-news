@@ -15,8 +15,8 @@ public class Article {
     private String body;
     private String authorName;
 
-    // this List will not affect database as the Comment is the "owning side" and that's where we need to make persistent changes
-    @OneToMany(mappedBy = "articleCommented")
+    // this List will not affect database as the Comment is the "owning side" where need to make persistent changes
+    @OneToMany(mappedBy = "article")
     private List<Comment> comments;
 
     // empty constructor is required

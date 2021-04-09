@@ -24,12 +24,10 @@ public class CommentController {
         Article article = articleRepository
                 .findById(articleId)
                 .orElseThrow(ResourceNotFoundException::new);
-        comment.setArticleCommented(article);
+        comment.setArticle(article);
         commentRepository.save(comment);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(comment);
-
-
     }
 }

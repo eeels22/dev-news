@@ -59,12 +59,13 @@ public class ArticleController {
     }
 
     // DELETE	/articles/{id}	delete the given article.
+    // changed to return nothing - returning the deleted entity may cause problems with one-to-many relationships
     @DeleteMapping("/{id}")
-    public ResponseEntity<Article> deleteArticleById(@PathVariable Long id) {
+    public void deleteArticleById(@PathVariable Long id) {
         Article article = articleRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         articleRepository.delete(article);
-        return ResponseEntity.ok(article);
     }
 }
+ed

@@ -12,7 +12,7 @@ public class Comment {
     private String authorName;
 
     @ManyToOne
-    private Article articleCommented;
+    private Article article;
 
     public Long getId() {
         return id;
@@ -38,11 +38,10 @@ public class Comment {
         this.authorName = authorName;
     }
 
-    public Article getArticleCommented() {
-        return articleCommented;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setArticleCommented(Article articleCommented) {
-        this.articleCommented = articleCommented;
-    }
+    public void setArticle(Article article) {
+        this.article = article;    }
 }
