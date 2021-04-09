@@ -29,7 +29,9 @@ public class ArticleController {
     // GET	/articles/{id}	return a specific article based on the provided id.
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
-        Article article = articleRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Article article = articleRepository
+                .findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
         return ResponseEntity.ok(article);
     }
 
@@ -37,14 +39,18 @@ public class ArticleController {
     @PostMapping()
     public ResponseEntity<Article> createArticle(@RequestBody Article article) {
         articleRepository.save(article);
-        return ResponseEntity.status(HttpStatus.CREATED).body(article);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(article);
     }
 
     // PUT	/articles/{id}	update the given article.
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article updatedArticle) {
         // check the article exists
-        articleRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        articleRepository
+                .findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
         // set id for updated article to the given id
         updatedArticle.setId(id);
         // overwrites old Article with that id
@@ -55,7 +61,9 @@ public class ArticleController {
     // DELETE	/articles/{id}	delete the given article.
     @DeleteMapping("/{id}")
     public ResponseEntity<Article> deleteArticleById(@PathVariable Long id) {
-        Article article = articleRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Article article = articleRepository
+                .findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
         articleRepository.delete(article);
         return ResponseEntity.ok(article);
     }

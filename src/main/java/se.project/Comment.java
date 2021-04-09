@@ -1,35 +1,21 @@
 package se.project;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class Article {
-
-    // A unique generated ID
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
     private String body;
     private String authorName;
 
-    // this List will not affect database as the Comment is the "owning side" and that's where we need to make persistent changes
-    @OneToMany(mappedBy = "articleCommented")
-    private List<Comment> comments;
+    @ManyToOne
+    private Article articleCommented;
 
-    // empty constructor is required
-    public Article() {
-    }
-
-    // getters required to display info to clients
     public Long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public String getBody() {
@@ -44,15 +30,19 @@ public class Article {
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public void setBody(String body) {
         this.body = body;
     }
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public Article getArticleCommented() {
+        return articleCommented;
+    }
+
+    public void setArticleCommented(Article articleCommented) {
+        this.articleCommented = articleCommented;
     }
 }
