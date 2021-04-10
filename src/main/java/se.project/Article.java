@@ -31,8 +31,8 @@ public class Article {
         return topics;
     }
 
-    // need mappedBy to avoid db created two tables mapping Article and Topic IDs
-    // Class with mappedBy denotes it is not the owning side
+    // Not the owning side for the relationship
+    // need mappedBy to avoid db creating two tables
     @ManyToMany(mappedBy = "articles")
     private List<Topic> topics;
 

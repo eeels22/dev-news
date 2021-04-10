@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,12 +68,22 @@ public class CommentController {
         return commentRepository.findAll();
     }
 
-//    GET	/comments?authorName={authorName}	return all comments made by author given by authorName.
-//    @GetMapping(value="/comments", params = {"authorName"})
-//    public List<Comment> getAllCommentsByAuthorName() {
-//        commentRepository.findAll()
-//
-//    }
+    /**
+     * Returns all comments made by author given by authorName.
+     * @param authorName the author whose comments we want to return
+     * @return List of comments by the author
+     */
+    @GetMapping(value="/comments", params = {"authorName"})
+    public List<Comment> getAllCommentsByAuthor(@RequestParam String authorName) {
+        List<Comment> authorComments = new ArrayList<>();
+        List<Comment> allComments = commentRepository.findAll();
+        for (Comment comment : allComments) {
+            if (comment.getAuthorName().equals(authorName)) {
+                authorComments.add(comment);
+            }
+        }
+        return authorComments;
+    }
 
     /**
      * Deletes the given comment.
@@ -86,5 +97,4 @@ public class CommentController {
                 .orElseThrow(ResourceNotFoundException::new);
         commentRepository.delete(comment);
     }
-
 }
