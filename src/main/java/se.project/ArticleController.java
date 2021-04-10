@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller for the Article class
+ * @author En-Chi Liu
+ */
 @RequestMapping("/articles")
 @RestController
 public class ArticleController {
@@ -14,19 +18,32 @@ public class ArticleController {
     // connection between Spring and database
     ArticleRepository articleRepository;
 
-    // automatically finds a class that implements interface ArticleRepository and sets to to our field
+
+
+    /**
+     *
+     * @param articleRepository an object that implements interface ArticleRepository
+     */
     @Autowired
     public ArticleController(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 
-    // GET	/articles	return all articles.
+    /**
+     * Returns all articles.
+     * @return a list of all articles
+     */
     @GetMapping()
     public List<Article> getAllArticles() {
         return articleRepository.findAll();
     }
 
-    // GET	/articles/{id}	return a specific article based on the provided id.
+    /**
+     * Returns a specific article based on the provided id.
+     * @param id the id of the desired article
+     * @return the desired article
+     * @throws ResourceNotFoundException if the article does not exist
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
         Article article = articleRepository
@@ -35,7 +52,11 @@ public class ArticleController {
         return ResponseEntity.ok(article);
     }
 
-    // POST	/articles	create a new article.
+    /**
+     * Creates a new article.
+     * @param article the article to create
+     * @return CREATED response status and the new article
+     */
     @PostMapping()
     public ResponseEntity<Article> createArticle(@RequestBody Article article) {
         articleRepository.save(article);
@@ -44,7 +65,12 @@ public class ArticleController {
                 .body(article);
     }
 
-    // PUT	/articles/{id}	update the given article.
+    /**
+     * Updates the given article.
+     * @param id the id of the article to update
+     * @param updatedArticle the contents of the update article
+     * @return OK response status and the updated article
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article updatedArticle) {
         // check the article exists
@@ -58,13 +84,18 @@ public class ArticleController {
         return ResponseEntity.ok(article);
     }
 
-    // DELETE	/articles/{id}	delete the given article.
-    // changed to return nothing - returning the deleted entity may cause problems with one-to-many relationships
+
+
+    /**
+     * Deletes the given article.
+     * @param id the id of the article to delete
+     */
     @DeleteMapping("/{id}")
     public void deleteArticleById(@PathVariable Long id) {
         Article article = articleRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         articleRepository.delete(article);
+        // return type is void as returning the deleted entity may cause problems with one-to-many relationships
     }
 }

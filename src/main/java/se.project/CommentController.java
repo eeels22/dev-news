@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Controller for the Comment class
+ * @author En-Chi Liu
+ */
 @RestController
 public class CommentController {
 
@@ -18,7 +22,12 @@ public class CommentController {
         this.articleRepository = articleRepository;
     }
 
-    //    POST	/articles/{articleId}/comments	create a new comment on article given by articleId.
+    /**
+     * Create a new comment on article given by articleId.
+     * @param articleId the article the comment belongs to
+     * @param comment the comment being created
+     * @return CREATED response status and the new comment
+     */
     @PostMapping("/articles/{articleId}/comments")
     public ResponseEntity<Comment> createComment(@PathVariable Long articleId, @RequestBody Comment comment) {
         // find the article
@@ -32,7 +41,12 @@ public class CommentController {
                 .body(comment);
     }
 
-    //    PUT	/comments/{id}	update the given comment.
+    /**
+     * Updates the given comment
+     * @param id the id of the existing comment to be updated
+     * @param updatedComment the contents of the updated comment
+     * @return OK response status and the updated comment
+     */
     @PutMapping("/comments/{id}")
     public ResponseEntity<Comment> updateComment(@PathVariable Long id, @Valid @RequestBody Comment updatedComment) {
         commentRepository
@@ -43,7 +57,10 @@ public class CommentController {
         return ResponseEntity.ok(updatedComment);
     }
 
-//    GET	/articles/{articleId}/comments	return all comments on article given by articleId.
+    /**
+     * Returns all comments on article given by articleId.
+     * @return a list of all comments
+     */
     @GetMapping("/comments")
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
