@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Controller for the Article class
+ *
  * @author En-Chi Liu
  */
 @RequestMapping("/articles")
@@ -19,9 +20,7 @@ public class ArticleController {
     ArticleRepository articleRepository;
 
 
-
     /**
-     *
      * @param articleRepository an object that implements interface ArticleRepository
      */
     @Autowired
@@ -31,6 +30,7 @@ public class ArticleController {
 
     /**
      * Returns all articles.
+     *
      * @return a list of all articles
      */
     @GetMapping()
@@ -40,6 +40,7 @@ public class ArticleController {
 
     /**
      * Returns a specific article based on the provided id.
+     *
      * @param id the id of the desired article
      * @return the desired article
      * @throws ResourceNotFoundException if the article does not exist
@@ -54,6 +55,7 @@ public class ArticleController {
 
     /**
      * Creates a new article.
+     *
      * @param article the article to create
      * @return CREATED response status and the new article
      */
@@ -67,7 +69,8 @@ public class ArticleController {
 
     /**
      * Updates the given article.
-     * @param id the id of the article to update
+     *
+     * @param id             the id of the article to update
      * @param updatedArticle the contents of the update article
      * @return OK response status and the updated article
      */
@@ -85,9 +88,9 @@ public class ArticleController {
     }
 
 
-
     /**
      * Deletes the given article.
+     *
      * @param id the id of the article to delete
      */
     @DeleteMapping("/{id}")

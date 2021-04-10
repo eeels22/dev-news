@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -67,11 +68,22 @@ public class CommentController {
     }
 
 //    GET	/comments?authorName={authorName}	return all comments made by author given by authorName.
-//    @GetMapping("/comments?authorName={authorName}")
+//    @GetMapping(value="/comments", params = {"authorName"})
 //    public List<Comment> getAllCommentsByAuthorName() {
+//        commentRepository.findAll()
 //
 //    }
 
+    /**
+     * Deletes the given comment.
+     * @param id the id of the comment to delete
+     */
+    @DeleteMapping("/comments/{id}")
+    public void deleteComment(@PathVariable Long id) {
+        Comment comment = commentRepository
+                .findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        commentRepository.delete(comment);
+    }
 
-//    DELETE	/comments/{id}	delete the given comment.
 }
