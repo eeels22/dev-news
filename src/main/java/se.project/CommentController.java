@@ -54,8 +54,8 @@ public class CommentController {
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         updatedComment.setId(id);
-        commentRepository.save(updatedComment);
-        return ResponseEntity.ok(updatedComment);
+        Comment comment = commentRepository.save(updatedComment);
+        return ResponseEntity.ok(comment);
     }
 
     /**

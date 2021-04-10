@@ -6,7 +6,7 @@ import java.util.List;
 @Entity
 public class Article {
 
-    // A unique generated ID
+    // A unique auto-generated ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,19 +15,24 @@ public class Article {
     private String body;
     private String authorName;
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    // this List will not affect database as the Comment is the "owning side" where need to make persistent changes
+    // this List will not affect database as the Comment class is the "owning side" where need to make persistent changes
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
 
-    // empty constructor is required
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
+    }
+
+    public List<Topic> getTopics() {
+        return topics;
+    }
+
+    // need mappedBy to avoid db created two tables mapping Article and Topic IDs
+    // Class with mappedBy denotes it is not the owning side
+    @ManyToMany(mappedBy = "articles")
+    private List<Topic> topics;
+
+    // empty or default constructor is required
     public Article() {
     }
 
@@ -48,6 +53,10 @@ public class Article {
         return authorName;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -62,5 +71,9 @@ public class Article {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

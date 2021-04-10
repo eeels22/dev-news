@@ -35,6 +35,10 @@ public class Comment {
         return authorName;
     }
 
+    public Article getArticle() {
+        return article;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -45,10 +49,6 @@ public class Comment {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
-    }
-
-    public Article getArticle() {
-        return article;
     }
 
     public void setArticle(Article article) {
