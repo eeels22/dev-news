@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * Models an article with id, title, body and authorName.
+ * Each article can have zero or many topics and zero or many comments.
  * @author En-Chi Liu
  */
 @Entity
@@ -16,27 +17,17 @@ public class Article {
     private Long id;
 
     private String title;
-    private String body;
+    private String body; // article text content
     private String authorName;
 
     // this List will not affect database as the Comment class is the "owning side" where need to make persistent changes
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
 
-    public void setTopics(List<Topic> topics) {
-        this.topics = topics;
-    }
-
-    public List<Topic> getTopics() {
-        return topics;
-    }
-
-    // Not the owning side for the relationship
-    // need mappedBy to avoid db creating two tables
+    // Not the owning side for the relationship. Need mappedBy to avoid db creating two tables
     @ManyToMany(mappedBy = "articles")
     private List<Topic> topics;
 
-    // empty or default constructor is required
     public Article() {
     }
 
@@ -61,6 +52,10 @@ public class Article {
         return comments;
     }
 
+    public List<Topic> getTopics() {
+        return topics;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -79,5 +74,9 @@ public class Article {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
     }
 }

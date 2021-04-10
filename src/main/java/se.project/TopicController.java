@@ -51,11 +51,24 @@ public class TopicController {
      */
     @PostMapping("/articles/{articleId}/topics")
     public ResponseEntity<Topic> associateArticleWithTopic(@PathVariable Long articleId, @RequestBody Topic topicToAssociate) {
+        // find the article if it exists
         Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-        Long topicId = topicToAssociate.getId(); // TODO IllegalArgumentException: does client have to pass topicID  in or is there anther find method?
-        Topic topic = topicRepository.findById(topicId).orElse(topicToAssociate);
-        topic.getArticles().add(article);
-        return ResponseEntity.status(HttpStatus.CREATED).body(topic);
+        // find the topic if it exists
+        String topicName = topicToAssociate.getName();
+        List<Topic> allTopics = topicRepository.findAll();
+        Topic topicFound = null;
+        for (Topic topic : allTopics) {
+            if (topic.getName().equals(topicName)) {
+                topicFound = topic;
+            }
+        }
+        // TODO DEBUG create the topic if it does not already exist
+        if (topicFound == null) {
+            topicFound = new Topic(topicName);
+        }
+        // associate the article with the topic
+        topicFound.getArticles().add(article);
+        return ResponseEntity.status(HttpStatus.CREATED).body(topicFound);
     }
 
     /**
