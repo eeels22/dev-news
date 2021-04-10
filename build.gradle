@@ -11,5 +11,6 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Web we only need the starter-web library
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring JPA contains the Hibernate tool
+    implementation 'org.springframework.boot:spring-boot-starter-validation' // for validation
     runtimeOnly 'org.postgresql:postgresql' // PostgreSQL Driver can make SQL queries, only needed during runtime
 }

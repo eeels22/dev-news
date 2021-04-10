@@ -2,10 +2,10 @@ package se.project;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Comment {
@@ -17,9 +17,10 @@ public class Comment {
     private String authorName;
 
     @ManyToOne
-    //@JsonIgnore // stops circular/recursive reference
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true) // only render the id rather than full object
+    @JoinColumn(nullable = false) //use @JoinColumn instead of @Column as its a foreign key
+    @NotNull // always needs to belong to an article
     private Article article;
 
     public Long getId() {
@@ -51,5 +52,6 @@ public class Comment {
     }
 
     public void setArticle(Article article) {
-        this.article = article;    }
+        this.article = article;
+    }
 }
