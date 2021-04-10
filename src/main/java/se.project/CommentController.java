@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class CommentController {
@@ -43,8 +44,16 @@ public class CommentController {
     }
 
 //    GET	/articles/{articleId}/comments	return all comments on article given by articleId.
+    @GetMapping("/comments")
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
+    }
 
 //    GET	/comments?authorName={authorName}	return all comments made by author given by authorName.
+//    @GetMapping("/comments?authorName={authorName}")
+//    public List<Comment> getAllCommentsByAuthorName() {
+//
+//    }
 
 
 //    DELETE	/comments/{id}	delete the given comment.
