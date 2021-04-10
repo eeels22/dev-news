@@ -68,4 +68,3 @@ public class ArticleController {
         articleRepository.delete(article);
     }
 }
-ed

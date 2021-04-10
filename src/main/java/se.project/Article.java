@@ -15,6 +15,14 @@ public class Article {
     private String body;
     private String authorName;
 
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
     // this List will not affect database as the Comment is the "owning side" where need to make persistent changes
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
