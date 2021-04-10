@@ -3,6 +3,10 @@ package se.project;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Models an article with id, title, body and authorName.
+ * @author En-Chi Liu
+ */
 @Entity
 public class Article {
 

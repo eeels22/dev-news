@@ -19,7 +19,6 @@ public class ArticleController {
     // connection between Spring and database
     ArticleRepository articleRepository;
 
-
     /**
      * @param articleRepository an object that implements interface ArticleRepository
      */
@@ -87,13 +86,13 @@ public class ArticleController {
         return ResponseEntity.ok(article);
     }
 
-
     /**
      * Deletes the given article.
      *
      * @param id the id of the article to delete
      */
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteArticleById(@PathVariable Long id) {
         Article article = articleRepository
                 .findById(id)

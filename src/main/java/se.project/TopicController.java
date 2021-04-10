@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller for the Topic class.
+ * @author En-Chi Liu
+ */
 @RestController
 public class TopicController {
 
@@ -39,14 +43,20 @@ public class TopicController {
         return article.getTopics();
     }
 
-//    POST	/articles/{articleId}/topics	associate the topic with the article given by articleId. If topic does not already exist, it is created.
-    // TODO should this have {topicID} as second PathVariable?
-//    @PostMapping("/articles/{articleId}/topics")
-//    public ResponseEntity<Topic> addArticleToTopic(@PathVariable Long articleId, @RequestBody Topic topicInput) {
-//        Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-//        Topic topic = topicRepository.findOne(topicInput).
-//
-//    }
+    /**
+     * Associates the topic with the article given by articleId. If topic does not already exist, it is created.
+     * @param articleId the id of the article
+     * @param topicToAssociate the topic to associate with the article
+     * @return the topic associated
+     */
+    @PostMapping("/articles/{articleId}/topics")
+    public ResponseEntity<Topic> associateArticleWithTopic(@PathVariable Long articleId, @RequestBody Topic topicToAssociate) {
+        Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
+        Long topicId = topicToAssociate.getId(); // TODO IllegalArgumentException: does client have to pass topicID  in or is there anther find method?
+        Topic topic = topicRepository.findById(topicId).orElse(topicToAssociate);
+        topic.getArticles().add(article);
+        return ResponseEntity.status(HttpStatus.CREATED).body(topic);
+    }
 
     /**
      * Creates a new topic
@@ -62,7 +72,8 @@ public class TopicController {
 
     /**
      * Updates the given topic.
-     * @param id The id of the topic to update.
+     *
+     * @param id           The id of the topic to update.
      * @param updatedTopic the content of the updated topic
      * @return OK response status and the updated topic
      */
@@ -82,6 +93,7 @@ public class TopicController {
      * @param id The id of the topic to delete
      */
     @DeleteMapping("/topics/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTopic(@PathVariable Long id) {
         Topic topic = topicRepository
                 .findById(id)
@@ -89,17 +101,38 @@ public class TopicController {
         topicRepository.delete(topic);
     }
 
-//    DELETE	/articles/{articleId}/topics/{topicId}	delete the association of a topic for the given article. The topic & article themselves remain.
+    /**
+     * Deletes the association of a topic for the given article. The topic & article themselves remain.
+     * @param articleId Id of the article
+     * @param topicId Id of the topic
+     */
+    @DeleteMapping("/articles/{articleId}/topics/{topicId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTopicAssociation(@PathVariable Long articleId, @PathVariable Long topicId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
+        Topic topic = topicRepository.findById(topicId).orElseThrow(ResourceNotFoundException::new);
+        // check association exists
+        if (topic.getArticles().contains(article)) {
+            topic.getArticles().remove(article);
+            topicRepository.save(topic);
+        } else {
+            throw new ResourceNotFoundException();
+        }
+    }
 
     /**
      * Returns all articles associated with the topic given by topicId.
+     *
      * @param topicId Id of the topic whose articles we want to return
      * @return articles belonging to the specific topic
      */
     @GetMapping("/topics/{topicId}/articles")
     public ResponseEntity<List<Article>> getArticlesForTopicByTopicId(@PathVariable Long topicId) {
-        Topic topic = topicRepository.findById(topicId).orElseThrow(ResourceNotFoundException::new);
+        Topic topic = topicRepository
+                .findById(topicId)
+                .orElseThrow(ResourceNotFoundException::new);
         List<Article> articles = topic.getArticles();
         return ResponseEntity.ok(articles);
     }
+
 }
