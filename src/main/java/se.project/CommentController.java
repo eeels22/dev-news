@@ -62,9 +62,20 @@ public class CommentController {
      * Returns all comments on article given by articleId.
      * @return a list of all comments
      */
-    @GetMapping("/comments")
-    public List<Comment> getAllComments() {
-        return commentRepository.findAll();
+    @GetMapping("/articles/{articleId}/comments") // TODO check against spec
+    public List<Comment> getCommentsByArticleId(@PathVariable Long articleId) {
+        //check if article id is valid
+        articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
+
+        // check all comments for ones whose article matches the article id
+        List<Comment> articleComments = new ArrayList<>();
+        List<Comment> allComments = commentRepository.findAll();
+        for (Comment comment : allComments) {
+            if (comment.getArticle().getId().equals(articleId)) {
+                articleComments.add(comment);
+            }
+        }
+        return articleComments;
     }
 
     /**
