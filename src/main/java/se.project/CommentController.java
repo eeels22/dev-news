@@ -73,10 +73,10 @@ public class CommentController {
                 .findById(articleId)
                 .orElseThrow(ResourceNotFoundException::new);
         comment.setArticle(article);
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(comment);
+                .body(savedComment);
     }
 
     /**
@@ -97,7 +97,6 @@ public class CommentController {
         Comment savedComment = commentRepository.save(updatedComment);
         return ResponseEntity.ok(savedComment);
     }
-
 
     /**
      * Deletes the given comment.

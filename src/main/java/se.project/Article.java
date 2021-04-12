@@ -28,8 +28,8 @@ public class Article {
     @JsonIgnore
     private Set<Comment> comments;
 
-    // Not the owning side for the relationship. Need mappedBy to avoid db creating two tables
-    @ManyToMany(mappedBy = "articles")
+    // Owning side for the relationship
+    @ManyToMany
     private Set<Topic> topics;
 
     public Article() {

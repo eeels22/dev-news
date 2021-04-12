@@ -2,6 +2,7 @@ package se.project;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -23,10 +24,9 @@ public class Topic {
 
     private String name;
 
-    // relationship owning side
-    @ManyToMany
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true) // only render the id rather than full object
+    // Not the owning side of the relationship
+    @ManyToMany(mappedBy = "topics")
+    @JsonIgnore
     private Set<Article> articles;
 
     public Topic() {

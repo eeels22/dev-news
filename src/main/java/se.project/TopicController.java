@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,64 +15,19 @@ import java.util.Set;
 public class TopicController {
 
     TopicRepository topicRepository;
-    ArticleRepository articleRepository;
 
-    public TopicController(TopicRepository topicRepository, ArticleRepository articleRepository) {
+    public TopicController(TopicRepository topicRepository) {
         this.topicRepository = topicRepository;
-        this.articleRepository = articleRepository;
     }
 
     /**
      * Returns all topics.
      *
-     * @return all topics
+     * @return Ok response status and a list of all topics
      */
     @GetMapping("/topics")
-    public List<Topic> getAllTopics() {
-        return topicRepository.findAll();
-    }
-
-    /**
-     * Returns all topics associated with the given article .
-     *
-     * @param articleId id of the article whose topics we want to return
-     * @return topics associated with the article
-     */
-    @GetMapping("/articles/{articleId}/topics")
-    public Set<Topic> getAllTopicsForArticle(@PathVariable Long articleId) {
-        Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-        return article.getTopics();
-    }
-
-    /**
-     * Associates the topic with the article given by articleId. If topic does not already exist, it is created.
-     * @param articleId the id of the article
-     * @param topicToAssociate the topic to associate with the article
-     * @return the topic associated
-     */
-    @PostMapping("/articles/{articleId}/topics")
-    public ResponseEntity<Topic> associateArticleWithTopic(@PathVariable Long articleId, @RequestBody Topic topicToAssociate) {
-        // find the article if it exists
-        Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-
-        // find the topic by name if it exists
-        String topicName = topicToAssociate.getName();
-        List<Topic> allTopics = topicRepository.findAll();
-        Topic topicFound = null; // TODO topicToAssociate;
-        for (Topic topic : allTopics) {
-            if (topic.getName().equals(topicName)) {
-                topicFound = topic; // TODO refactor to avoid topicFound
-            }
-        }
-        // create the topic if it does not already exist
-        if (topicFound == null) {
-            topicFound = topicToAssociate;
-            topicFound.setArticles(new HashSet<>()); // required to avoid null exception
-        }
-        // associate the article with the topic and save to persist changes
-        topicFound.getArticles().add(article);
-        topicRepository.save(topicFound);
-        return ResponseEntity.status(HttpStatus.CREATED).body(topicFound);
+    public ResponseEntity<List<Topic>> getAllTopics() {
+        return ResponseEntity.ok(topicRepository.findAll());
     }
 
     /**
@@ -84,8 +38,8 @@ public class TopicController {
      */
     @PostMapping("/topics")
     public ResponseEntity<Topic> createTopic(@RequestBody Topic topic) {
-        topicRepository.save(topic);
-        return ResponseEntity.status(HttpStatus.CREATED).body(topic);
+        Topic savedTopic = topicRepository.save(topic);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTopic);
     }
 
     /**
@@ -97,13 +51,17 @@ public class TopicController {
      */
     @PutMapping("/topics/{id}")
     public ResponseEntity<Topic> updateTopic(@PathVariable Long id, @RequestBody Topic updatedTopic) {
-        topicRepository
+        Topic oldTopic = topicRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
+        // Copy over id from old topic
         updatedTopic.setId(id);
-        Topic topic = topicRepository.save(updatedTopic);
-        return ResponseEntity.ok(topic);
+        // Copy over articles from old topic
+        updatedTopic.setArticles(oldTopic.getArticles());
+        Topic savedTopic = topicRepository.save(updatedTopic);
+        return ResponseEntity.ok(savedTopic);
     }
+
 
     /**
      * Deletes the given topic.
@@ -116,27 +74,11 @@ public class TopicController {
         Topic topic = topicRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
+        // todo remove associations before deleting the topic
+
         topicRepository.delete(topic);
     }
 
-    /**
-     * Deletes the association of a topic for the given article. The topic & article themselves remain.
-     * @param articleId Id of the article
-     * @param topicId Id of the topic
-     */
-    @DeleteMapping("/articles/{articleId}/topics/{topicId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTopicAssociation(@PathVariable Long articleId, @PathVariable Long topicId) {
-        Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-        Topic topic = topicRepository.findById(topicId).orElseThrow(ResourceNotFoundException::new);
-        // check association exists
-        if (topic.getArticles().contains(article)) {
-            topic.getArticles().remove(article);
-            topicRepository.save(topic);
-        } else {
-            throw new ResourceNotFoundException();
-        }
-    }
 
     /**
      * Returns all articles associated with the topic given by topicId.
