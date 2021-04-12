@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,21 +54,24 @@ public class TopicController {
     public ResponseEntity<Topic> associateArticleWithTopic(@PathVariable Long articleId, @RequestBody Topic topicToAssociate) {
         // find the article if it exists
         Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-        // find the topic if it exists
+
+        // find the topic by name if it exists
         String topicName = topicToAssociate.getName();
         List<Topic> allTopics = topicRepository.findAll();
-        Topic topicFound = null;
+        Topic topicFound = null; // TODO topicToAssociate;
         for (Topic topic : allTopics) {
             if (topic.getName().equals(topicName)) {
-                topicFound = topic;
+                topicFound = topic; // TODO refactor to avoid topicFound
             }
         }
-        // TODO DEBUG create the topic if it does not already exist
+        // create the topic if it does not already exist
         if (topicFound == null) {
-            topicFound = new Topic(topicName);
+            topicFound = topicToAssociate;
+            topicFound.setArticles(new ArrayList<Article>()); // required to avoid null exception
         }
-        // associate the article with the topic
+        // associate the article with the topic and save to persist changes
         topicFound.getArticles().add(article);
+        topicRepository.save(topicFound);
         return ResponseEntity.status(HttpStatus.CREATED).body(topicFound);
     }
 

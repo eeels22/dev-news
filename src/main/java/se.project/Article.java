@@ -21,7 +21,7 @@ public class Article {
     private String authorName;
 
     // this List will not affect database as the Comment class is the "owning side" where need to make persistent changes
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     // Not the owning side for the relationship. Need mappedBy to avoid db creating two tables
