@@ -1,8 +1,13 @@
-package se.project;
+package sdaproject.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sdaproject.api.exception.ResourceNotFoundException;
+import sdaproject.model.Article;
+import sdaproject.model.Comment;
+import sdaproject.repository.ArticleRepository;
+import sdaproject.repository.CommentRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;

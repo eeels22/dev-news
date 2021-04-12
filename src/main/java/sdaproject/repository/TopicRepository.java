@@ -1,7 +1,10 @@
-package se.project;
+package sdaproject.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import sdaproject.model.Topic;
 
+@Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {
     // checks if a topic with the given name exists
     boolean existsTopicByName(String name);
