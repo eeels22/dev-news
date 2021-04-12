@@ -1,8 +1,8 @@
-package sdaproject.repository;
+package se.sdaproject.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import sdaproject.model.Topic;
+import se.sdaproject.model.Topic;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {

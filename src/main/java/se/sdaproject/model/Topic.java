@@ -1,4 +1,4 @@
-package sdaproject.model;
+package se.sdaproject.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

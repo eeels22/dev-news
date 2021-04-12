@@ -1,14 +1,14 @@
-package sdaproject.api;
+package se.sdaproject.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sdaproject.api.exception.ResourceNotFoundException;
-import sdaproject.model.Article;
-import sdaproject.model.Topic;
-import sdaproject.repository.ArticleRepository;
-import sdaproject.repository.TopicRepository;
+import se.sdaproject.api.exception.ResourceNotFoundException;
+import se.sdaproject.model.Article;
+import se.sdaproject.model.Topic;
+import se.sdaproject.repository.ArticleRepository;
+import se.sdaproject.repository.TopicRepository;
 
 import java.util.List;
 import java.util.Set;

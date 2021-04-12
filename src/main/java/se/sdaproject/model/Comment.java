@@ -1,4 +1,4 @@
-package sdaproject.model;
+package se.sdaproject.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
