@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Models a Topic with id and name.
@@ -26,7 +27,7 @@ public class Topic {
     @ManyToMany
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true) // only render the id rather than full object
-    private List<Article> articles;
+    private Set<Article> articles;
 
     public Topic() {
     }
@@ -43,7 +44,7 @@ public class Topic {
         return name;
     }
 
-    public List<Article> getArticles() {
+    public Set<Article> getArticles() {
         return articles;
     }
 
@@ -55,7 +56,7 @@ public class Topic {
         this.name = name;
     }
 
-    public void setArticles(List<Article> articles) {
+    public void setArticles(Set<Article> articles) {
         this.articles = articles;
     }
 

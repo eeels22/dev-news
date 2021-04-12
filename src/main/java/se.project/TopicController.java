@@ -4,8 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Controller for the Topic class.
@@ -39,7 +40,7 @@ public class TopicController {
      * @return topics associated with the article
      */
     @GetMapping("/articles/{articleId}/topics")
-    public List<Topic> getAllTopicsForArticle(@PathVariable Long articleId) {
+    public Set<Topic> getAllTopicsForArticle(@PathVariable Long articleId) {
         Article article = articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
         return article.getTopics();
     }
@@ -67,7 +68,7 @@ public class TopicController {
         // create the topic if it does not already exist
         if (topicFound == null) {
             topicFound = topicToAssociate;
-            topicFound.setArticles(new ArrayList<Article>()); // required to avoid null exception
+            topicFound.setArticles(new HashSet<>()); // required to avoid null exception
         }
         // associate the article with the topic and save to persist changes
         topicFound.getArticles().add(article);
@@ -144,11 +145,11 @@ public class TopicController {
      * @return articles belonging to the specific topic
      */
     @GetMapping("/topics/{topicId}/articles")
-    public ResponseEntity<List<Article>> getArticlesForTopicByTopicId(@PathVariable Long topicId) {
+    public ResponseEntity<Set<Article>> getArticlesForTopicByTopicId(@PathVariable Long topicId) {
         Topic topic = topicRepository
                 .findById(topicId)
                 .orElseThrow(ResourceNotFoundException::new);
-        List<Article> articles = topic.getArticles();
+        Set<Article> articles = topic.getArticles();
         return ResponseEntity.ok(articles);
     }
 

@@ -22,8 +22,8 @@ public class Comment {
     private String authorName; // author of comment
 
     @ManyToOne // relationship owning side
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true) // only render the id rather than full object
+//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//    @JsonIdentityReference(alwaysAsId = true) // only render the id rather than full object
     @JoinColumn(nullable = false) // use @JoinColumn instead of @Column as its a foreign key
     @NotNull // A comment always needs to belong to an article
     private Article article; // article on which the comment was posted

@@ -24,6 +24,43 @@ public class CommentController {
     }
 
     /**
+     * Returns all comments on article given by articleId.
+     * @return OK response status and a list of all comments
+     */
+    @GetMapping("/articles/{articleId}/comments")
+    public ResponseEntity<List<Comment>> getCommentsByArticleId(@PathVariable Long articleId) {
+        //check if article id is valid
+        articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
+        // check all comments for ones whose article matches the article id
+        List<Comment> articleComments = new ArrayList<>();
+        List<Comment> allComments = commentRepository.findAll();
+        for (Comment comment : allComments) {
+            if (comment.getArticle().getId().equals(articleId)) {
+                articleComments.add(comment);
+            }
+        }
+        return ResponseEntity.ok(articleComments);
+    }
+
+    /**
+     * Returns all comments made by author given by authorName.
+     * @param authorName the author whose comments we want to return
+     * @return OK response status and a list of comments by the author
+     */
+    @GetMapping(value="/comments", params = {"authorName"})
+    public ResponseEntity<List<Comment>> getAllCommentsByAuthor(@RequestParam String authorName) {
+        List<Comment> authorComments = new ArrayList<>();
+        List<Comment> allComments = commentRepository.findAll();
+        for (Comment comment : allComments) {
+            if (comment.getAuthorName().equals(authorName)) {
+                authorComments.add(comment);
+            }
+        }
+        return ResponseEntity.ok(authorComments);
+    }
+
+
+    /**
      * Create a new comment on article given by articleId.
      * @param articleId the article the comment belongs to
      * @param comment the comment being created
@@ -31,7 +68,7 @@ public class CommentController {
      */
     @PostMapping("/articles/{articleId}/comments")
     public ResponseEntity<Comment> createComment(@PathVariable Long articleId, @RequestBody Comment comment) {
-        // find the article
+        // find the article if it exists
         Article article = articleRepository
                 .findById(articleId)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -49,51 +86,18 @@ public class CommentController {
      * @return OK response status and the updated comment
      */
     @PutMapping("/comments/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long id, @Valid @RequestBody Comment updatedComment) {
-        commentRepository
+    public ResponseEntity<Comment> updateCommentById(@PathVariable Long id, @Valid @RequestBody Comment updatedComment) {
+        Comment oldComment = commentRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
+                Long articleId = oldComment.getArticle().getId();
         updatedComment.setId(id);
-        Comment comment = commentRepository.save(updatedComment);
-        return ResponseEntity.ok(comment);
+        // copy article to updatedComment
+        updatedComment.getArticle().setId(articleId);
+        Comment savedComment = commentRepository.save(updatedComment);
+        return ResponseEntity.ok(savedComment);
     }
 
-    /**
-     * Returns all comments on article given by articleId.
-     * @return a list of all comments
-     */
-    @GetMapping("/articles/{articleId}/comments") // TODO check against spec
-    public List<Comment> getCommentsByArticleId(@PathVariable Long articleId) {
-        //check if article id is valid
-        articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-
-        // check all comments for ones whose article matches the article id
-        List<Comment> articleComments = new ArrayList<>();
-        List<Comment> allComments = commentRepository.findAll();
-        for (Comment comment : allComments) {
-            if (comment.getArticle().getId().equals(articleId)) {
-                articleComments.add(comment);
-            }
-        }
-        return articleComments;
-    }
-
-    /**
-     * Returns all comments made by author given by authorName.
-     * @param authorName the author whose comments we want to return
-     * @return List of comments by the author
-     */
-    @GetMapping(value="/comments", params = {"authorName"})
-    public List<Comment> getAllCommentsByAuthor(@RequestParam String authorName) {
-        List<Comment> authorComments = new ArrayList<>();
-        List<Comment> allComments = commentRepository.findAll();
-        for (Comment comment : allComments) {
-            if (comment.getAuthorName().equals(authorName)) {
-                authorComments.add(comment);
-            }
-        }
-        return authorComments;
-    }
 
     /**
      * Deletes the given comment.

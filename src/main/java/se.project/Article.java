@@ -1,7 +1,10 @@
 package se.project;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Models an article with id, title, body and authorName.
@@ -22,11 +25,12 @@ public class Article {
 
     // this List will not affect database as the Comment class is the "owning side" where need to make persistent changes
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    @JsonIgnore
+    private Set<Comment> comments;
 
     // Not the owning side for the relationship. Need mappedBy to avoid db creating two tables
     @ManyToMany(mappedBy = "articles")
-    private List<Topic> topics;
+    private Set<Topic> topics;
 
     public Article() {
     }
@@ -48,11 +52,11 @@ public class Article {
         return authorName;
     }
 
-    public List<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
-    public List<Topic> getTopics() {
+    public Set<Topic> getTopics() {
         return topics;
     }
 
@@ -72,11 +76,11 @@ public class Article {
         this.authorName = authorName;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
 
-    public void setTopics(List<Topic> topics) {
+    public void setTopics(Set<Topic> topics) {
         this.topics = topics;
     }
 }
