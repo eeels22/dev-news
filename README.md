@@ -1,51 +1,36 @@
 # Dev News
 
 ## Introduction
-This assignment is all about building the backend API for a developer news site where users can create articles, comment them and post their reactions (likes, dislikes). It doesn't require a graphical user interface so it is enough to be able to make requests and get plain json text responses via curl/Postman. 
+This is a basic backend API for a developer news site where users can create articles, comment them and assign topics to articles.  
 
-## Learning Objectives
-* Understand the basic structure of a Spring application.
-* Practice building, testing and consuming rest APIs.
-* Learn about data modelling for real world applications.
-* Learn how to interact with a relational database using an ORM tool implementing Spring JPA (Hibernate).
+You can make requests and get plain json text responses via curl/Postman. 
 
-## Setup
-Remember that you will need to configure the following dependencies in your `build.gradle`:
+## Dependencies
+The project uses these dependencies:
 * Spring Web
 * Spring JPA
 * PostgreSQL Driver
 
-`src/main/resources/appliction.properties` should also be properly configured:
-```properties
-spring.jpa.database=POSTGRESQL
-spring.jpa.show-sql=true
+## Setup
+###Docker
+`docker-compose up`
+###Gradle
+On MacOS or Linux
+`./gradlew bootRun`
+On Windows
+`gradle bootRun`
 
-spring.datasource.url=jdbc:postgresql://localhost:5431/demo
-spring.datasource.username=demo_user
-spring.datasource.password=demo_pass
+## Using the API
 
-spring.jpa.generate-ddl=true
-spring.jpa.hibernate.ddl-auto=create
-```
+### Article
+Article is the core entity. It represents a news article with an:
+* id
+* title
+* body (article text content)
+* authorName
 
-## Assignment
+#### Endpoints
 
-### Articles
-Article is the core entity in our project. It represents a news article with a unique **id**, **title**, **body** (article text content) and the 
-**authorName**.
-
-Example JSON response when requesting an article:
-
-```json
-{
-    "id": 1,
-    "title": "10 reasons to learn Spring",
-    "body": "In this article I'll be listing 10 reasons why you should learn spring and use it in your next project...",
-    "authorName": "John Smith"
-}
-```
-
-These are the endpoints for the article API that should exist:
 | HTTP Method | HTTP Path | Action |
 | ------------|-----------|--------|
 | `GET`    | `/articles`      | return all articles. |
@@ -54,11 +39,8 @@ These are the endpoints for the article API that should exist:
 | `PUT`    | `/articles/{id}` | update the given article.|
 | `DELETE` | `/articles/{id}` | delete the given article.|
 
-#### Exercise 1
-Create an Article model and implement the above API.
-
 ### Comments
-We want our visitors to be able to comment the different articles with a unique **id**, **body**, **authorName** (for the comment), and **article**
+Users can comment the different articles with a unique **id**, **body**, **authorName** (for the comment), and **article**
 on which the comment was posted. Each article can have zero or more comments. 
 
 Example JSON response when requesting a comment:
@@ -77,7 +59,7 @@ Example JSON response when requesting a comment:
 }
 
 ```
-With the following endpoints:
+#### Endpoints
 
 | HTTP Method | HTTP Path | Action |
 | ------------|-----------|--------|
@@ -87,13 +69,11 @@ With the following endpoints:
 | `PUT`    | `/comments/{id}`                    | update the given comment. |
 | `DELETE` | `/comments/{id}`                    | delete the given comment. |
 
-#### Exercise 2
-Create a Comment model and implement the above API.
 
 ### Topics
-We want to categorize our articles by topics. Each topic can be applied to zero or many articles and each article can have zero or many topics.
+Articles can be catagorized by topics. Each topic can be applied to zero or many articles and each article can have zero or many topics.
 
-Example JSON response when requesting an article should now be:
+Example JSON response when requesting an article:
 
 ```json
 {
@@ -117,7 +97,8 @@ Example JSON response when requesting an article should now be:
     ]
 }
 ```
-Endpoints:
+
+#### Endpoints
 
 | HTTP Method | HTTP Path | Action |
 | ------------|-----------|--------|
@@ -129,12 +110,3 @@ Endpoints:
 | `DELETE` | `/topics/{id}` | delete the given topic. |
 | `DELETE` | `/articles/{articleId}/topics/{topicId}` | delete the association of a topic for the given article. The topic & article themselves remain. |
 | `GET`    | `/topics/{topicId}/articles` | return all articles associated with the topic given by `topicId`. |
-
-#### Exercise 3
-Create a Topic model and implement the above API.
-
-### Reactions
-
-#### Exercise 4 (Bonus)
-To make our application more interactive we might want to add the ability to add article and comment reactions (likes, dislikes, ...).
-Go ahead and implement reactions in your application. You're free to choose how the model should look like so try to draw it out beforehand and think of what kind of relationship will the reactions have to the articles and comments respectively.
