@@ -1,5 +1,6 @@
 package se.sdaproject.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class CommentController {
     CommentRepository commentRepository;
     ArticleRepository articleRepository;
 
+    @Autowired
     public CommentController(CommentRepository commentRepository, ArticleRepository articleRepository) {
         this.commentRepository = commentRepository;
         this.articleRepository = articleRepository;
@@ -34,9 +36,8 @@ public class CommentController {
      */
     @GetMapping("/articles/{articleId}/comments")
     public ResponseEntity<List<Comment>> getCommentsByArticleId(@PathVariable Long articleId) {
-        //check if article id is valid
         articleRepository.findById(articleId).orElseThrow(ResourceNotFoundException::new);
-        // check all comments for ones whose article matches the article id
+        // check all comments for the article that matches the articleId
         List<Comment> articleComments = new ArrayList<>();
         List<Comment> allComments = commentRepository.findAll();
         for (Comment comment : allComments) {
@@ -73,7 +74,6 @@ public class CommentController {
      */
     @PostMapping("/articles/{articleId}/comments")
     public ResponseEntity<Comment> createComment(@PathVariable Long articleId, @RequestBody Comment comment) {
-        // find the article if it exists
         Article article = articleRepository
                 .findById(articleId)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -95,10 +95,7 @@ public class CommentController {
         Comment oldComment = commentRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-                Long articleId = oldComment.getArticle().getId();
         updatedComment.setId(id);
-        // copy article to updatedComment
-        updatedComment.getArticle().setId(articleId);
         Comment savedComment = commentRepository.save(updatedComment);
         return ResponseEntity.ok(savedComment);
     }
