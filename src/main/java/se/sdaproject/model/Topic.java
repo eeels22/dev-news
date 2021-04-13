@@ -1,6 +1,8 @@
 package se.sdaproject.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,9 +22,9 @@ public class Topic {
 
     private String name;
 
-    // Not the owning side of the relationship
-    @ManyToMany(mappedBy = "topics")
+    @ManyToMany(mappedBy = "topics") // Not the owning side of the relationship
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE) //todo test
     private Set<Article> articles;
 
     public Topic() {
