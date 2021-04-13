@@ -23,7 +23,8 @@ Install [Docker Desktop](https://www.docker.com/products/docker-desktop) and sta
 
 In the project root folder, start the Docker container with `docker-compose up`  
 
-Check the database is running with `docker ps`
+Check the database is running with `docker ps`  
+
 ###Gradle
 In a new terminal, again in the project root, enter the run command:  
 
