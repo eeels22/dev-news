@@ -1,8 +1,15 @@
-package se.project;
+package se.sdaproject.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
+/**
+ * Models an article with id, title, body and authorName.
+ * Each article can have zero or many topics and zero or many comments.
+ * @author En-Chi Liu
+ */
 @Entity
 public class Article {
 
@@ -12,27 +19,18 @@ public class Article {
     private Long id;
 
     private String title;
-    private String body;
+    private String body; // article text content
     private String authorName;
 
     // this List will not affect database as the Comment class is the "owning side" where need to make persistent changes
-    @OneToMany(mappedBy = "article")
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> comments;
 
-    public void setTopics(List<Topic> topics) {
-        this.topics = topics;
-    }
+    // Owning side for the relationship
+    @ManyToMany
+    private Set<Topic> topics;
 
-    public List<Topic> getTopics() {
-        return topics;
-    }
-
-    // need mappedBy to avoid db created two tables mapping Article and Topic IDs
-    // Class with mappedBy denotes it is not the owning side
-    @ManyToMany(mappedBy = "articles")
-    private List<Topic> topics;
-
-    // empty or default constructor is required
     public Article() {
     }
 
@@ -53,8 +51,12 @@ public class Article {
         return authorName;
     }
 
-    public List<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
+    }
+
+    public Set<Topic> getTopics() {
+        return topics;
     }
 
     public void setId(Long id) {
@@ -73,7 +75,11 @@ public class Article {
         this.authorName = authorName;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public void setTopics(Set<Topic> topics) {
+        this.topics = topics;
     }
 }

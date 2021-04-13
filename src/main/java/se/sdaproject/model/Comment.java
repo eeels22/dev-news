@@ -1,27 +1,26 @@
-package se.project;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+package se.sdaproject.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Models a comment with id, body and authorName.
+ * Each comment must belong to exactly one article.
+ * @author En-Chi Liu
+ */
 @Entity
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String body;
-    private String authorName;
+    private String body; // comment text content
+    private String authorName; // author of comment
 
-    @ManyToOne
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true) // only render the id rather than full object
-    @JoinColumn(nullable = false) //use @JoinColumn instead of @Column as its a foreign key
-    @NotNull // always needs to belong to an article
-    private Article article;
+    @ManyToOne // relationship-owning side
+    @JoinColumn(nullable = false) // use @JoinColumn instead of @Column as its a foreign key
+    @NotNull // A comment always needs to belong to an article
+    private Article article; // article on which the comment was posted
 
     public Long getId() {
         return id;

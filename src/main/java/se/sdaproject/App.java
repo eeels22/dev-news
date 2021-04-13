@@ -1,4 +1,4 @@
-package se.project;
+package se.sdaproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
