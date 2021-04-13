@@ -22,9 +22,9 @@ public class Topic {
 
     private String name;
 
-    @ManyToMany(mappedBy = "topics") // Not the owning side of the relationship
+    @ManyToMany(mappedBy = "topics") // inverse (non-owning) side of the relationship
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE) //todo test
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Article> articles;
 
     public Topic() {

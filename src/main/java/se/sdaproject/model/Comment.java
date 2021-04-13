@@ -18,8 +18,8 @@ public class Comment {
     private String authorName; // author of comment
 
     @ManyToOne // relationship-owning side
-    @JoinColumn(nullable = false) // use @JoinColumn instead of @Column as its a foreign key
-    @NotNull // A comment always needs to belong to an article
+    @JoinColumn(nullable = false)
+    @NotNull // a comment always needs to belong to an article article
     private Article article; // article on which the comment was posted
 
     public Long getId() {

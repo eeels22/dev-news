@@ -84,13 +84,11 @@ public class ArticleController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article updatedArticle) {
-        // check the article exists
         articleRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        // set id for updated article to the given id
         updatedArticle.setId(id);
-        // overwrites old Article with that id
+        // overwrites on saving as id is a dupe
         Article savedArticle = articleRepository.save(updatedArticle);
         return ResponseEntity.ok(savedArticle);
     }
@@ -108,9 +106,7 @@ public class ArticleController {
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
         articleRepository.delete(article);
-        // return type is void as returning the deleted entity may cause problems with one-to-many relationships
     }
-
 
     /**
      * Returns all topics associated with the given article .
