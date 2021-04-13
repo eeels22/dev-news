@@ -125,5 +125,5 @@ Path prefix: `localhost:8080`
 | `DELETE` | `/articles/{articleId}/topics/{topicId}` | delete the association of a topic for the given article. The topic & article themselves remain. |
 | `GET`    | `/topics/{topicId}/articles` | return all articles associated with the topic given by `topicId`. |
 
-##Authors and acknowledgements
+## Authors and acknowledgements
 Thanks to Kwabena Asante-Poku (Back End teacher at SDA), the teaching assistants and fellow SDA classmates.
