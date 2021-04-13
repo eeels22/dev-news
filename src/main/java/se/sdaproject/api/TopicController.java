@@ -1,5 +1,6 @@
 package se.sdaproject.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class TopicController {
 
     TopicRepository topicRepository;
 
+    @Autowired
     public TopicController(TopicRepository topicRepository) {
         this.topicRepository = topicRepository;
     }
@@ -77,9 +79,7 @@ public class TopicController {
         Topic topic = topicRepository
                 .findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-                                                                            // todo remove associations before deleting the topic
-
-        topicRepository.delete(topic);
+        topicRepository.delete(topic); // todo this is not the managing side. May have to move to ArticleController
     }
 
     /**
