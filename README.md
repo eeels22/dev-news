@@ -5,10 +5,16 @@ This is a basic backend API for a developer news site where users can create art
 
 You can make requests and get plain json text responses via curl/Postman. 
 
-## Dependencies
-The project uses these dependencies:
+## Requirements
+
+* Gradle 6.8.3
+* Docker
+* Postman or curl for making requests 
+
+The project has these dependencies:
 * Spring Web
 * Spring JPA
+* Spring Validation
 * PostgreSQL Driver
 
 ## Setup
