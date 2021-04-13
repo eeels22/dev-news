@@ -25,7 +25,7 @@ In the project root folder, start the Docker container with `docker-compose up`
 
 Check the database is running with `docker ps`  
 
-###Gradle
+### Gradle
 In a new terminal, again in the project root, enter the run command:  
 
 On MacOS or Linux: `./gradlew bootRun`  
