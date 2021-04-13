@@ -12,24 +12,36 @@ The project uses these dependencies:
 * PostgreSQL Driver
 
 ## Setup
-###Docker
-`docker-compose up`
+### Docker
+Install [Docker Desktop](https://www.docker.com/products/docker-desktop) and start it up.  
+
+In the project root folder, start the Docker container with `docker-compose up`  
+
+Check the database is running with `docker ps`
 ###Gradle
-On MacOS or Linux
-`./gradlew bootRun`
-On Windows
-`gradle bootRun`
+In a new terminal, again in the project root, enter the run command:  
+
+On MacOS or Linux: `./gradlew bootRun`  
+
+On Windows: `gradle bootRun`
 
 ## Using the API
 
+### Make requests with Postman or Curl
+
+Install [Postman](https://www.postman.com/downloads/) and start it up.
+Create a new collection and start adding requests to the endpoints detailed below.
+
+### Make requests with Curl
+Or use [curl](https://curl.se/), a command line tool for getting or sending files using URL syntax.
+
+
+
 ### Article
-Article is the core entity. It represents a news article with an:
-* id
-* title
-* body (article text content)
-* authorName
+Article is the core entity. It represents a news article with an **id**, **title**, **body** (article text content), and **authorName**.
 
 #### Endpoints
+Path prefix: `localhost:8080`
 
 | HTTP Method | HTTP Path | Action |
 | ------------|-----------|--------|
@@ -60,6 +72,7 @@ Example JSON response when requesting a comment:
 
 ```
 #### Endpoints
+Path prefix: `localhost:8080`
 
 | HTTP Method | HTTP Path | Action |
 | ------------|-----------|--------|
@@ -99,6 +112,7 @@ Example JSON response when requesting an article:
 ```
 
 #### Endpoints
+Path prefix: `localhost:8080`
 
 | HTTP Method | HTTP Path | Action |
 | ------------|-----------|--------|
@@ -110,3 +124,6 @@ Example JSON response when requesting an article:
 | `DELETE` | `/topics/{id}` | delete the given topic. |
 | `DELETE` | `/articles/{articleId}/topics/{topicId}` | delete the association of a topic for the given article. The topic & article themselves remain. |
 | `GET`    | `/topics/{topicId}/articles` | return all articles associated with the topic given by `topicId`. |
+
+##Authors and acknowledgements
+Thanks to Kwabena Asante-Poku (Back End teacher at SDA), the teaching assistants and fellow SDA classmates.
